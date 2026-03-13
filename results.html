@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Results — Perform for Life Programme</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black: #0C1237;
+    --charcoal: #0e1540;
+    --card: #121a4a;
+    --border: #1e2d6b;
+    --orange: #ffde59;
+    --orange-dark: #e6c400;
+    --accent: #3EC1EA;
+    --white: #f5f5f0;
+    --muted: #7a8bbf;
+    --green: #22c55e;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(12,18,55,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo img {
+    height: 44px;
+    width: auto;
+  }
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .nav-brand span { color: var(--accent); display: block; font-size: 0.72rem; letter-spacing: 0.14em; }
+  .nav-ig {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 16px;
+    transition: all 0.2s;
+  }
+  .nav-ig:hover { color: var(--white); border-color: var(--white); }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 64px 40px 32px;
+    position: relative; z-index: 1;
+  }
+  .congrats-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(62,193,234,0.1);
+    border: 1px solid rgba(62,193,234,0.3);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+  }
+  .hero h1 em { color: var(--orange); font-style: normal; }
+  .hero h1 em { color: var(--orange); font-style: normal; }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-name { color: var(--white); font-weight: 600; }
+
+  /* ── MAIN CALORIE NUMBER ── */
+  .calorie-hero {
+    max-width: 820px;
+    margin: 40px auto;
+    padding: 0 40px;
+    position: relative; z-index: 1;
+  }
+  .calorie-card {
+    background: linear-gradient(135deg, #121a4a 0%, #0d1235 100%);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .calorie-card::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(62,193,234,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .calorie-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .calorie-number {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 14vw, 9rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-bottom: 8px;
+    animation: countUp 1.5s ease-out;
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .calorie-unit {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+  }
+  .calorie-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 300;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* ── STATS GRID ── */
+  .stats-section {
+    max-width: 820px;
+    margin: 0 auto 20px;
+    padding: 0 40px;
+    position: relative; z-index: 1;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 20px;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+  }
+  .stat-box:nth-child(2) { animation-delay: 0.1s; }
+  .stat-box:nth-child(3) { animation-delay: 0.2s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .stat-val {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    letter-spacing: 0.04em;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── BREAKDOWN ── */
+  .breakdown {
+    max-width: 820px;
+    margin: 0 auto 20px;
+    padding: 0 40px;
+    position: relative; z-index: 1;
+  }
+  .breakdown-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+  }
+  .breakdown-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-key { color: var(--muted); font-weight: 300; }
+  .breakdown-val { font-weight: 600; }
+  .breakdown-val.orange { color: var(--orange); }
+  .breakdown-val.red { color: var(--accent); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    max-width: 820px;
+    margin: 0 auto 80px;
+    padding: 0 40px;
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .section-header {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 300;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .cta-card {
+    border-radius: 4px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  /* Hub card — deep blue tint */
+  .cta-hub {
+    background: #1e2d6b;
+    border-color: #2e4090;
+  }
+  .cta-hub:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  /* Work with me — yellow */
+  .cta-workwithme {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+  .cta-workwithme:hover { background: #ffe980; transform: translateY(-2px); }
+
+  /* Instagram */
+  .cta-instagram {
+    background: #0d1535;
+    border-color: #1e2d6b;
+  }
+  .cta-instagram:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .cta-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+  }
+  .cta-text { flex: 1; }
+  .cta-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .cta-workwithme .cta-name { color: #0C1237; }
+  .cta-desc {
+    font-size: 0.83rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .cta-workwithme .cta-desc { color: rgba(12,18,55,0.65); }
+  .cta-arrow {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+  .cta-workwithme .cta-arrow { color: #0C1237; opacity: 0.7; }
+
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    color: var(--muted); font-size: 0.75rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--border);
+  }
+
+  /* Re-do */
+  .redo-wrap {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .redo-link {
+    color: var(--muted);
+    font-size: 0.83rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .redo-link:hover { color: var(--white); }
+
+  footer {
+    text-align: center;
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    position: relative; z-index: 1;
+  }
+  footer a { color: var(--orange); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .hero, .calorie-hero, .stats-section, .breakdown, .cta-section { padding-left: 20px; padding-right: 20px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .cta-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="fat-loss-calculator.html" class="nav-logo">
+    <img src="JAC-Logo-Dark.png" alt="Perform for Life Programme" />
+    <div class="nav-brand">PERFORM FOR LIFE<span>PROGRAMME</span></div>
+  </a>
+  <!-- 🔧 Replace href with your Instagram URL -->
+  <a href="https://www.instagram.com/jac_fitness_/" target="_blank" class="nav-ig">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+    @jac_fitness_
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="congrats-badge">✓ &nbsp; Results Ready</div>
+  <h1>Here Are Your<br><em>Numbers</em>, <span class="hero-name" id="hero-name">Champ</span>.</h1>
+  <p class="hero-sub">Based on your stats and goals, here's exactly what you need to eat every single day to hit your target.</p>
+</div>
+
+<!-- CALORIE NUMBER -->
+<div class="calorie-hero">
+  <div class="calorie-card">
+    <div class="calorie-label">Your Daily Calorie Target</div>
+    <div class="calorie-number" id="cal-number">—</div>
+    <div class="calorie-unit">KCAL / DAY</div>
+    <p class="calorie-desc" id="cal-desc">Loading your personalised target…</p>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-val" id="stat-tdee">—</div>
+      <div class="stat-label">Maintenance Calories</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="stat-deficit">—</div>
+      <div class="stat-label">Daily Deficit</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="stat-weeks">—</div>
+      <div class="stat-label">Weeks to Goal</div>
+    </div>
+  </div>
+</div>
+
+<!-- BREAKDOWN -->
+<div class="breakdown">
+  <div class="breakdown-card">
+    <div class="breakdown-title">YOUR CALCULATION BREAKDOWN</div>
+    <div class="breakdown-row">
+      <span class="breakdown-key">Basal Metabolic Rate (BMR)</span>
+      <span class="breakdown-val" id="br-bmr">—</span>
+    </div>
+    <div class="breakdown-row">
+      <span class="breakdown-key">× Activity Multiplier</span>
+      <span class="breakdown-val" id="br-activity">—</span>
+    </div>
+    <div class="breakdown-row">
+      <span class="breakdown-key">= Total Daily Energy (TDEE)</span>
+      <span class="breakdown-val orange" id="br-tdee">—</span>
+    </div>
+    <div class="breakdown-row">
+      <span class="breakdown-key">− Daily Deficit (for your pace)</span>
+      <span class="breakdown-val red" id="br-deficit">−—</span>
+    </div>
+    <div class="breakdown-row" style="background: rgba(255,222,89,0.05); margin: 0 -32px; padding: 18px 32px; border-radius: 0 0 3px 3px;">
+      <span class="breakdown-key" style="font-weight:600; color: var(--white);">= Your Daily Target</span>
+      <span class="breakdown-val orange" style="font-size:1.2rem;" id="br-target">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- CTAs -->
+<div class="cta-section">
+  <div>
+    <div class="section-header">WHAT'S NEXT?</div>
+    <p class="section-sub">You've got your numbers. Now let's make sure you actually hit them.</p>
+  </div>
+
+  <!-- Work with me — PRIMARY -->
+  <!-- 🔧 Replace href with your Typeform link -->
+  <a href="https://j4u0c7ugnqa.typeform.com/to/TVFcFjal" target="_blank" class="cta-card cta-workwithme">
+    <div class="cta-icon">🚀</div>
+    <div class="cta-text">
+      <div class="cta-name">WORK WITH ME</div>
+      <div class="cta-desc">Ready to go all in? Apply for 1-to-1 coaching with Andy and get a programme built entirely around your numbers.</div>
+    </div>
+    <div class="cta-arrow">→</div>
+  </a>
+
+  <div class="divider">Free Resources</div>
+
+  <!-- Resource Hub -->
+  <!-- 🔧 Replace href with your resource hub URL -->
+  <a href="https://www.skool.com/jacfitness-the-archive-8411/about" target="_blank" class="cta-card cta-hub">
+    <div class="cta-icon">📚</div>
+    <div class="cta-text">
+      <div class="cta-name" style="color:var(--orange);">FREE RESOURCE HUB</div>
+      <div class="cta-desc" style="color:var(--orange); opacity:0.75;">Guides, training plans, and fat loss blueprints — everything you need to make these numbers work in real life.</div>
+    </div>
+    <div class="cta-arrow" style="color:var(--orange);">→</div>
+  </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/jac_fitness_/" target="_blank" class="cta-card cta-instagram">
+    <div class="cta-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3EC1EA" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="#3EC1EA" stroke="none"/></svg>
+    </div>
+    <div class="cta-text">
+      <div class="cta-name" style="color:#3EC1EA;">FOLLOW @JAC_FITNESS_</div>
+      <div class="cta-desc">Daily fat loss content, tips, and behind-the-scenes of real client transformations.</div>
+    </div>
+    <div class="cta-arrow" style="color:#3EC1EA;">→</div>
+  </a>
+
+  <div class="redo-wrap">
+    <a href="fat-loss-calculator.html" class="redo-link">← Recalculate with different numbers</a>
+  </div>
+</div>
+
+<footer>
+  Built by <a href="https://www.instagram.com/jac_fitness_/" target="_blank">@jac_fitness_</a> · Perform for Life Programme · 
+  Numbers are estimates based on the Mifflin-St Jeor equation. Individual results vary. Not medical advice.
+</footer>
+
+<script>
+  // Load results from sessionStorage
+  const data = JSON.parse(sessionStorage.getItem('dbp_results') || 'null');
+
+  // If no data, redirect back to calculator immediately — stop all execution
+  if (!data || !data.calorie_target) {
+    window.location.replace('fat-loss-calculator.html');
+  } else {
+
+    // Populate name
+    if (data.first_name) {
+      document.getElementById('hero-name').textContent = data.first_name + '.';
+    }
+
+    // Main calorie number (start hidden, animate in)
+    document.getElementById('cal-number').textContent = '—';
+
+    // Description
+    const paceText = data.pace_kg_per_week == 0.25 ? 'steady' : data.pace_kg_per_week == 0.5 ? 'moderate' : 'aggressive';
+    const tolose = (parseFloat(data.weight_kg) - parseFloat(data.goal_kg)).toFixed(1);
+    document.getElementById('cal-desc').textContent =
+      `At your ${paceText} pace of ${data.pace_kg_per_week} kg/week, you'll lose ${tolose > 0 ? tolose + ' kg' : 'weight'} in approximately ${data.weeks_to_goal} weeks.`;
+
+    // Stats
+    document.getElementById('stat-tdee').textContent = parseInt(data.tdee).toLocaleString();
+    document.getElementById('stat-deficit').textContent = parseInt(data.daily_deficit).toLocaleString();
+    document.getElementById('stat-weeks').textContent = data.weeks_to_goal;
+
+    // Breakdown
+    const activityLabels = {
+      '1.2': '×1.2 (Sedentary)',
+      '1.375': '×1.375 (Lightly Active)',
+      '1.55': '×1.55 (Moderately Active)',
+      '1.725': '×1.725 (Very Active)',
+      '1.9': '×1.9 (Athlete)',
+    };
+    document.getElementById('br-bmr').textContent = parseInt(data.bmr).toLocaleString() + ' kcal';
+    document.getElementById('br-activity').textContent = activityLabels[String(data.activity_multiplier)] || ('×' + data.activity_multiplier);
+    document.getElementById('br-tdee').textContent = parseInt(data.tdee).toLocaleString() + ' kcal';
+    document.getElementById('br-deficit').textContent = '−' + parseInt(data.daily_deficit).toLocaleString() + ' kcal';
+    document.getElementById('br-target').textContent = parseInt(data.calorie_target).toLocaleString() + ' kcal';
+
+    // Animate calorie number counting up
+    const target = parseInt(data.calorie_target);
+    const el = document.getElementById('cal-number');
+    let current = target * 0.5;
+    const stepVal = (target - current) / 60;
+    const timer = setInterval(() => {
+      current += stepVal;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.round(current).toLocaleString();
+    }, 16);
+
+  }
+</script>
+</body>
+</html>
